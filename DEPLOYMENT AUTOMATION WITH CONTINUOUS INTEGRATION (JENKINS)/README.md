@@ -20,9 +20,9 @@ Here is what your updated architecture will look like upon completion of this pr
 `sudo apt install default-jdk-headless`<br>
 Install Jenkins<br>
 `wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -`<br>
-`sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > \    /etc/apt/sources.list.d/jenkins.list'`<br>
+`sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'`<br>
 `sudo apt update`<br>
-`sudo apt-get install jenkins`<br>
+`sudo apt install jenkins`<br>
 Make sure Jenkins is up and running<br>
 `sudo systemctl status jenkins`<br>
 
