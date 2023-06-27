@@ -95,7 +95,7 @@ This job will be triggered by GitHub webhooks and will execute a ‘build’ tas
 For now, we can only do it manually.
 Click the "Build Now" button, if you have configured everything correctly, the build will be successful and you will see it under #1
 
-
+![1_configure_2](https://github.com/ifydevops23/CI_CD/assets/126971054/fa69e1f9-4823-414a-9188-b1c1a66517ee)
 
 - You can open the build and check in "Console Output" if it has run successfully. If so – congratulations!<br>
 You have just made your very first Jenkins build!But this build does not produce anything and it runs only when we trigger it manually.<br> 
@@ -157,15 +157,16 @@ Test the configuration and make sure the connection returns Success. <br>
 ![8_send_build_over_ssh](https://github.com/ifydevops23/CI_CD/assets/126971054/4456f48b-0f18-4373-8e84-0e03aea4964e)
 
 - Save this configuration and go ahead, and change something in README.MD file in your GitHub Tooling repository.
-Webhook will trigger a new job and in the "Console Output" of the job you will find something like this:
+Webhook will trigger a new job and in the "Console Output" of the job you will find something like this: <br>
 
+![6_Build3_transfer_via_ssh](https://github.com/ifydevops23/CI_CD/assets/126971054/5e83dd75-0b50-4ff3-b282-47420e5e7490)
 
 ```
 SSH: Transferred 25 file(s)
 Finished: SUCCESS
 ```
-![6_Build3_transfer_via_ssh](https://github.com/ifydevops23/CI_CD/assets/126971054/5e83dd75-0b50-4ff3-b282-47420e5e7490)
 
+![5_Console_output](https://github.com/ifydevops23/CI_CD/assets/126971054/b468321b-8daf-4ce1-89db-59688ee97d69)
 
 To make sure that the files in /mnt/apps have been updated – connect via SSH/Putty to your NFS server and check README.MD file<br>
 `cat /mnt/apps/README.md`<br>
