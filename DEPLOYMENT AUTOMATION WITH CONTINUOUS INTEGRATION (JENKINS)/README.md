@@ -1,12 +1,12 @@
 # DEPLOYMENT AUTOMATION WITH JENKINS SERVER
 
-One of the ways to guarantee fast and repeatable deployments is the Automation of routine tasks<br>.
+One of the ways to guarantee fast and repeatable deployments is the Automation of routine tasks.<br>
 In this project, we are going to start automating part of our routine tasks with a free and open-source automation server – Jenkins.<br>
 It is one of the most popular CI/CD tools, it was created by a former Sun Microsystems developer Kohsuke Kawaguchi and the project originally had a named "Hudson".<br>
 
 According to Circle CI, Continuous integration (CI) is a software development strategy that increases the speed of development while ensuring the quality of the code that teams deploy. 
 Developers continually commit code in small increments (at least daily, or even several times a day), which is then automatically built and tested before it is merged with the shared repository<br>
-In our project we are going to utilize Jenkins CI capabilities to make sure that every change made to the source code in GitHub https://github.com/<yourname>/Tooling.git will be automatically be updated to the Tooling Website.<br>
+In our project we are going to utilize Jenkins CI capabilities to make sure that every change made to the source code in GitHub https://github.com/<username>/Tooling.git will be automatically be updated to the Tooling Website.<br>
 
 Task<br>
 Enhance the architecture prepared in Project 8 by adding a Jenkins server, and configuring a job to automatically deploy source code changes from Git to the NFS server.<br>
