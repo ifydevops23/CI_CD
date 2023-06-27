@@ -6,7 +6,7 @@ It is one of the most popular CI/CD tools, it was created by a former Sun Micros
 
 According to Circle CI, Continuous integration (CI) is a software development strategy that increases the speed of development while ensuring the quality of the code that teams deploy. 
 Developers continually commit code in small increments (at least daily, or even several times a day), which is then automatically built and tested before it is merged with the shared repository<br>
-In our project we are going to utilize Jenkins CI capabilities to make sure that every change made to the source code in GitHub https://github.com/<yourname>/Tooling will be automatically be updated to the Tooling Website.<br>\
+In our project we are going to utilize Jenkins CI capabilities to make sure that every change made to the source code in GitHub https://github.com/<yourname>/Tooling.git will be automatically be updated to the Tooling Website.<br>
 
 Task<br>
 Enhance the architecture prepared in Project 8 by adding a Jenkins server, and configuring a job to automatically deploy source code changes from Git to the NFS server.<br>
@@ -72,7 +72,7 @@ This job will be triggered by GitHub webhooks and will execute a ‘build’ tas
 
 - Enable webhooks in your GitHub repository settings
 
-![2_add_webhook](https://github.com/ifydevops23/CI_CD/assets/126971054/e787b3dc-56e7-448f-bbf8-def737fa055d)
+![1_add_webhppk_payload_url](https://github.com/ifydevops23/CI_CD/assets/126971054/0eaa5653-8553-48db-baee-a106552d1cfa)
 
 ![2_successfully_created_webhook](https://github.com/ifydevops23/CI_CD/assets/126971054/44d062ff-f548-4667-a109-7c778e3c3aea)
 
@@ -113,7 +113,6 @@ By default, the artifacts are stored on the Jenkins server locally<br>
 Now we have our artifacts saved locally on Jenkins server, the next step is to copy them to our NFS server to /mnt/apps directory.<br>
 Jenkins is a highly extendable application and there are 1400+ plugins available. <br>
 
-![8_archive_from_putty](https://github.com/ifydevops23/CI_CD/assets/126971054/e000fcd2-4049-44ce-a038-a2d15c71cf58)
 
 We will need a plugin that is called "Publish Over SSH".<br>
 
@@ -129,8 +128,7 @@ We will need a plugin that is called "Publish Over SSH".<br>
 2. Configure the job/project to copy artifacts over to the NFS server.
 - On the main dashboard select "Manage Jenkins" and choose the "Configure System" menu item.
 - Scroll down to Publish over the SSH plugin configuration section and configure it to be able to connect to your NFS server:
-
-![8_send_build_over_ssh](https://github.com/ifydevops23/CI_CD/assets/126971054/70fb5eb2-dc84-4596-a127-05060c68c65d)
+![5_Publish_over_ssh](https://github.com/ifydevops23/CI_CD/assets/126971054/b83ce401-79f6-4b6d-b22d-e94693bbf137)
 
 - Provide a private key (the content of .pem file that you use to connect to the NFS server via SSH/Putty)
 ![cat_nfs_key](https://github.com/ifydevops23/CI_CD/assets/126971054/4ec45a5b-87c2-406d-b6d7-db6fd6804cbb)
@@ -140,11 +138,13 @@ We will need a plugin that is called "Publish Over SSH".<br>
 - Remote directory – /mnt/apps since our Web Servers use it as a mounting point to retrieve files from the NFS server.
 Test the configuration and make sure the connection returns Success. <br>
 **Remember, that TCP port 22 on NFS server must be open to receive SSH connections.**
-![5_Publish_over_ssh](https://github.com/ifydevops23/CI_CD/assets/126971054/b83ce401-79f6-4b6d-b22d-e94693bbf137)
+![5_success_from_nfs](https://github.com/ifydevops23/CI_CD/assets/126971054/83031d45-07da-4608-8dc6-2a3f976b159e)
 
-- Save the configuration, open your Jenkins job/project configuration page and add another one "Post-build Action".
+- Save the configuration,open your Jenkins job/project configuration page and add another one "Post-build Action".
 
 - Configure it to send all files produced by the build into our previously define remote directory. In our case we want to copy all files and directories – so we use ** <br>
+
+![8_send_build_over_ssh](https://github.com/ifydevops23/CI_CD/assets/126971054/4456f48b-0f18-4373-8e84-0e03aea4964e)
 
 - Save this configuration and go ahead, and change something in README.MD file in your GitHub Tooling repository.
 Webhook will trigger a new job and in the "Console Output" of the job you will find something like this:
