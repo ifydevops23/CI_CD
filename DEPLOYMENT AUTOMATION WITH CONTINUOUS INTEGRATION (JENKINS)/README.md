@@ -72,6 +72,9 @@ This job will be triggered by GitHub webhooks and will execute a ‘build’ tas
 
 - Enable webhooks in your GitHub repository settings
 
+![2_add_webhook](https://github.com/ifydevops23/CI_CD/assets/126971054/86fa9c32-4016-4406-99cd-f5b90537185c)
+
+
 ![1_add_webhppk_payload_url](https://github.com/ifydevops23/CI_CD/assets/126971054/0eaa5653-8553-48db-baee-a106552d1cfa)
 
 ![2_successfully_created_webhook](https://github.com/ifydevops23/CI_CD/assets/126971054/44d062ff-f548-4667-a109-7c778e3c3aea)
@@ -90,18 +93,24 @@ This job will be triggered by GitHub webhooks and will execute a ‘build’ tas
 For now, we can only do it manually.
 Click the "Build Now" button, if you have configured everything correctly, the build will be successful and you will see it under #1
 
+
+
 - You can open the build and check in "Console Output" if it has run successfully. If so – congratulations!<br>
 You have just made your very first Jenkins build!But this build does not produce anything and it runs only when we trigger it manually.<br> 
 Let us fix it.<br>
 
 - Click "Configure" your job/project and add these two configurations.<br>
 - Configure triggering the job from the GitHub webhook:<br>
+![3_build_triggers](https://github.com/ifydevops23/CI_CD/assets/126971054/30ee6784-9cc1-4448-b437-6cfcefe49c12)
 
 - Configure "Post-build Actions" to archive all the files – files resulting from a build are called "artifacts".<br>
+
+![1_archive the artifact](https://github.com/ifydevops23/CI_CD/assets/126971054/c7ae19c9-2351-46e6-9d98-f7c2efb2e205)
 
 - Now, go ahead and make some changes in any file in your GitHub repository (e.g. README.MD file) and push the changes to the master branch.<br>
 You will see that a new build has been launched automatically (by webhook) and you can see its results – artifacts, saved on the Jenkins server.<br>
 
+![6_Build2_archiving_artifacts](https://github.com/ifydevops23/CI_CD/assets/126971054/00b5c5c6-8ff8-4f87-ba33-eef07f03be14)
 
 You have now configured an automated Jenkins job that receives files from GitHub by webhook trigger (this method is considered as ‘push’ because the changes are being ‘pushed’ and file transfer is initiated by GitHub).<br> There are also other methods: trigger one job (downstream) from another (upstream), poll GitHub periodically and others.<br>
 By default, the artifacts are stored on the Jenkins server locally<br>
@@ -112,7 +121,6 @@ By default, the artifacts are stored on the Jenkins server locally<br>
 ## STEP 3 - CONFIGURE JENKINS TO COPY FILES TO NFS SERVER VIA SSH
 Now we have our artifacts saved locally on Jenkins server, the next step is to copy them to our NFS server to /mnt/apps directory.<br>
 Jenkins is a highly extendable application and there are 1400+ plugins available. <br>
-
 
 We will need a plugin that is called "Publish Over SSH".<br>
 
@@ -154,7 +162,8 @@ Webhook will trigger a new job and in the "Console Output" of the job you will f
 SSH: Transferred 25 file(s)
 Finished: SUCCESS
 ```
-![6_Build3_transfer_via_ssh](https://github.com/ifydevops23/CI_CD/assets/126971054/159ee08a-a885-4ad3-b979-24428aac450b)
+![6_Build3_transfer_via_ssh](https://github.com/ifydevops23/CI_CD/assets/126971054/5e83dd75-0b50-4ff3-b282-47420e5e7490)
+
 
 To make sure that the files in /mnt/apps have been updated – connect via SSH/Putty to your NFS server and check README.MD file<br>
 `cat /mnt/apps/README.md`<br>
