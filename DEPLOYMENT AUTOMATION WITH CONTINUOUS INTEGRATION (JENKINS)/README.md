@@ -6,11 +6,13 @@ It is one of the most popular CI/CD tools, it was created by a former Sun Micros
 
 According to Circle CI, Continuous integration (CI) is a software development strategy that increases the speed of development while ensuring the quality of the code that teams deploy. 
 Developers continually commit code in small increments (at least daily, or even several times a day), which is then automatically built and tested before it is merged with the shared repository<br>
-In our project we are going to utilize Jenkins CI capabilities to make sure that every change made to the source code in GitHub https://github.com/<yourname>/tooling will be automatically be updated to the Tooling Website.<br>
+In our project we are going to utilize Jenkins CI capabilities to make sure that every change made to the source code in GitHub https://github.com/<yourname>/Tooling will be automatically be updated to the Tooling Website.<br>\
 
 Task<br>
 Enhance the architecture prepared in Project 8 by adding a Jenkins server, and configuring a job to automatically deploy source code changes from Git to the NFS server.<br>
 Here is what your updated architecture will look like upon completion of this project:<br>
+
+![00_implemented](https://github.com/ifydevops23/CI_CD/assets/126971054/b62230a0-04cf-4517-9665-592deffd10bb)
 
 
 ## Step 1 – INSTALL THE JENKINS SERVER
@@ -18,30 +20,50 @@ Here is what your updated architecture will look like upon completion of this pr
 - Install JDK (since Jenkins is a Java-based application)<br>
 `sudo apt update`<br>
 `sudo apt install default-jdk-headless`<br>
-Install Jenkins<br>
+
+Install Jenkins<br>![1_install_jdk_headless](https://github.com/ifydevops23/CI_CD/assets/126971054/cb5826e4-7433-439f-8f10-30075c2d5602)
+
 `wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -`<br>
 `sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'`<br>
 `sudo apt update`<br>
+Add Key if asked for Public Key<br>
+`sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 5BA31D57EF5975CA`<br>
+![1_wget_debiamn_pkg](https://github.com/ifydevops23/CI_CD/assets/126971054/8f4a88f4-7441-40f5-92e5-df8fd458ab7f)
+
 `sudo apt install jenkins`<br>
+![1_install_jenkins](https://github.com/ifydevops23/CI_CD/assets/126971054/9c4dadd9-fe18-4e27-98ad-b96ed8d9960e)
+
 Make sure Jenkins is up and running<br>
 `sudo systemctl status jenkins`<br>
-
+![1_status_jenkins](https://github.com/ifydevops23/CI_CD/assets/126971054/32d9b571-25ab-4006-bce0-0f2b9e969584)
 
 By default Jenkins server uses TCP port 8080 – open it by creating a new Inbound Rule in your EC2 security group.<br>
-
+![security_group](https://github.com/ifydevops23/CI_CD/assets/126971054/a3c37fb1-8474-49eb-9a92-9f6374877386)
 
 Perform initial Jenkins setup.<br>
 From your browser access 
 ```
 http://<Jenkins-Server-Public-IP-Address-or-Public-DNS-Name>:8080
 ```
+
 You will be prompted to provide a default admin password.Retrieve it from your server: <br>
 `sudo cat /var/lib/jenkins/secrets/initialAdminPassword`
 
+![1_admin_password](https://github.com/ifydevops23/CI_CD/assets/126971054/9daff864-fbbb-4e99-bc50-233c6d943440)
+
+
 Then you will be asked which plugins to install – choose **suggested plugins.**
 
-Once plugin installation is done – create an admin user and you will get your Jenkins server address.
+![1_choose_suggested_plugin](https://github.com/ifydevops23/CI_CD/assets/126971054/386a2c0e-7ef8-4640-a42d-c65baa3fc160)
+
+
+Once plugin installation is done – create an admin user and you will get your Jenkins server address.<br>
+![1_create_new_user](https://github.com/ifydevops23/CI_CD/assets/126971054/6b7c0db0-0ea3-4941-a386-d8b36c872f60)
+
+![1_Jenkins_is ready](https://github.com/ifydevops23/CI_CD/assets/126971054/667075a2-6dd3-4339-abdb-b09b80da0fcb)
+
 The installation is completed!
+
 
 ## STEP 2 – CONFIGURE JENKINS TO RETRIEVE SOURCE CODES FROM GITHUB USING WEBHOOKS.<br>
 
@@ -50,11 +72,19 @@ This job will be triggered by GitHub webhooks and will execute a ‘build’ tas
 
 - Enable webhooks in your GitHub repository settings
 
+![2_add_webhook](https://github.com/ifydevops23/CI_CD/assets/126971054/e787b3dc-56e7-448f-bbf8-def737fa055d)
+
+![2_successfully_created_webhook](https://github.com/ifydevops23/CI_CD/assets/126971054/44d062ff-f548-4667-a109-7c778e3c3aea)
+
 - Go to Jenkins web console, click "New Item" and create a "Freestyle project"
+
+![8_create_job_freestyle](https://github.com/ifydevops23/CI_CD/assets/126971054/a5c5526c-f732-4f5b-9104-ee1c71a53d72)
 
 - To connect your GitHub repository, you will need to provide its URL, you can copy it from the repository itself.
 
 - In the configuration of your Jenkins freestyle project choose Git repository, and provide there the link to your Tooling GitHub repository and credentials (user/password) so Jenkins could access files in the repository.
+
+![3_add_credential_to_job](https://github.com/ifydevops23/CI_CD/assets/126971054/12fb7ab4-7545-4858-bc20-cadcfdf0e4a3)
 
 - Save the configuration and let us try to run the build. 
 For now, we can only do it manually.
@@ -77,18 +107,30 @@ You have now configured an automated Jenkins job that receives files from GitHub
 By default, the artifacts are stored on the Jenkins server locally<br>
 `ls /var/lib/jenkins/jobs/tooling_github/builds/<build_number>/archive/`
 
+![8_archive_from_putty](https://github.com/ifydevops23/CI_CD/assets/126971054/e000fcd2-4049-44ce-a038-a2d15c71cf58)
+
 ## STEP 3 - CONFIGURE JENKINS TO COPY FILES TO NFS SERVER VIA SSH
 Now we have our artifacts saved locally on Jenkins server, the next step is to copy them to our NFS server to /mnt/apps directory.<br>
 Jenkins is a highly extendable application and there are 1400+ plugins available. <br>
+
+![8_archive_from_putty](https://github.com/ifydevops23/CI_CD/assets/126971054/e000fcd2-4049-44ce-a038-a2d15c71cf58)
+
 We will need a plugin that is called "Publish Over SSH".<br>
 
 1. Install the "Publish Over SSH" plugin.
 - On the main dashboard select "Manage Jenkins" and choose the "Manage Plugins" menu item.
 - On the "Available" tab search for the "Publish Over SSH" plugin and install it.
 
+![4_publish_over_ssh](https://github.com/ifydevops23/CI_CD/assets/126971054/bc5a5cab-8e62-4192-94dd-7708df7c92ca)
+
+![8_installed_plugin](https://github.com/ifydevops23/CI_CD/assets/126971054/452906a1-3be0-42bf-9b76-6bb8ed2b6b08)
+
+
 2. Configure the job/project to copy artifacts over to the NFS server.
 - On the main dashboard select "Manage Jenkins" and choose the "Configure System" menu item.
 - Scroll down to Publish over the SSH plugin configuration section and configure it to be able to connect to your NFS server:
+
+![8_send_build_over_ssh](https://github.com/ifydevops23/CI_CD/assets/126971054/70fb5eb2-dc84-4596-a127-05060c68c65d)
 
 - Provide a private key (the content of .pem file that you use to connect to the NFS server via SSH/Putty)
 - Arbitrary name
@@ -107,13 +149,18 @@ Test the configuration and make sure the connection returns Success. <br>
 Webhook will trigger a new job and in the "Console Output" of the job you will find something like this:
 
 
+
 ```
 SSH: Transferred 25 file(s)
 Finished: SUCCESS
 ```
 
+![8_send_build_over_ssh](https://github.com/ifydevops23/CI_CD/assets/126971054/15a98f6a-5b9e-4456-8a17-4f739e44cb9f)
+
 To make sure that the files in /mnt/apps have been updated – connect via SSH/Putty to your NFS server and check README.MD file<br>
 `cat /mnt/apps/README.md`<br>
+
+
 If you see the changes you had previously made in your GitHub – the job works as expected.<br>
 
 Congratulations!You have just implemented your first Continous Integration solution using Jenkins CI. 
