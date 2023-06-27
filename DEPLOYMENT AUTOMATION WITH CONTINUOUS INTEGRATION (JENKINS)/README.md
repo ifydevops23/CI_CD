@@ -133,33 +133,33 @@ We will need a plugin that is called "Publish Over SSH".<br>
 ![8_send_build_over_ssh](https://github.com/ifydevops23/CI_CD/assets/126971054/70fb5eb2-dc84-4596-a127-05060c68c65d)
 
 - Provide a private key (the content of .pem file that you use to connect to the NFS server via SSH/Putty)
+![cat_nfs_key](https://github.com/ifydevops23/CI_CD/assets/126971054/4ec45a5b-87c2-406d-b6d7-db6fd6804cbb)
 - Arbitrary name
 - Hostname – can be private IP address of your NFS server
 - Username – ec2-user (since the NFS server is based on EC2 with RHEL 8)
 - Remote directory – /mnt/apps since our Web Servers use it as a mounting point to retrieve files from the NFS server.
 Test the configuration and make sure the connection returns Success. <br>
 **Remember, that TCP port 22 on NFS server must be open to receive SSH connections.**
-
+![5_Publish_over_ssh](https://github.com/ifydevops23/CI_CD/assets/126971054/b83ce401-79f6-4b6d-b22d-e94693bbf137)
 
 - Save the configuration, open your Jenkins job/project configuration page and add another one "Post-build Action".
 
-- Configure it to send all files produced by the build into our previously define remote directory. In our case we want to copy all files and directories – so we use **_**_**<br>
+- Configure it to send all files produced by the build into our previously define remote directory. In our case we want to copy all files and directories – so we use ** <br>
 
 - Save this configuration and go ahead, and change something in README.MD file in your GitHub Tooling repository.
 Webhook will trigger a new job and in the "Console Output" of the job you will find something like this:
-
 
 
 ```
 SSH: Transferred 25 file(s)
 Finished: SUCCESS
 ```
-
-![8_send_build_over_ssh](https://github.com/ifydevops23/CI_CD/assets/126971054/15a98f6a-5b9e-4456-8a17-4f739e44cb9f)
+![6_Build3_transfer_via_ssh](https://github.com/ifydevops23/CI_CD/assets/126971054/159ee08a-a885-4ad3-b979-24428aac450b)
 
 To make sure that the files in /mnt/apps have been updated – connect via SSH/Putty to your NFS server and check README.MD file<br>
 `cat /mnt/apps/README.md`<br>
 
+![7_putty_response_from_nfs](https://github.com/ifydevops23/CI_CD/assets/126971054/52368aad-8f60-4571-91c2-141c21ffaf2c)
 
 If you see the changes you had previously made in your GitHub – the job works as expected.<br>
 
