@@ -46,6 +46,8 @@ From your browser access
 http://<Jenkins-Server-Public-IP-Address-or-Public-DNS-Name>:8080
 ```
 
+![1_login_admin_pass](https://github.com/ifydevops23/CI_CD/assets/126971054/3d114edb-1e71-4b31-bb84-d22c72d8dfb5)
+
 You will be prompted to provide a default admin password.Retrieve it from your server: <br>
 `sudo cat /var/lib/jenkins/secrets/initialAdminPassword`
 
