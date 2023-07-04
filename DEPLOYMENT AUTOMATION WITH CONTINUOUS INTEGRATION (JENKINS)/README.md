@@ -107,7 +107,7 @@ Let us fix it.<br>
 
 - Configure "Post-build Actions" to archive all the files – files resulting from a build are called "artifacts".<br>
 
-![1_archive the artifact](https://github.com/ifydevops23/CI_CD/assets/126971054/c7ae19c9-2351-46e6-9d98-f7c2efb2e205)
+![2_post_build_action](https://github.com/ifydevops23/CI_CD/assets/126971054/9be56b34-5184-46f7-a8da-e75ef9c545aa)
 
 - Now, go ahead and make some changes in any file in your GitHub repository (e.g. README.MD file) and push the changes to the master branch.<br>
 You will see that a new build has been launched automatically (by webhook) and you can see its results – artifacts, saved on the Jenkins server.<br>
