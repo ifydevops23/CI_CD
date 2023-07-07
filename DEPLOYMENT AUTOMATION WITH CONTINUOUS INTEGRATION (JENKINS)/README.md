@@ -59,13 +59,17 @@ Then you will be asked which plugins to install – choose **suggested plugins.*
 ![1_choose_suggested_plugin](https://github.com/ifydevops23/CI_CD/assets/126971054/386a2c0e-7ef8-4640-a42d-c65baa3fc160)
 
 
-Once plugin installation is done – create an admin user and you will get your Jenkins server address.<br>
+Once plugin installation is done – create an admin user and you will get your Jenkins server address. (Reload or open in a new tab incase of a freeze/unresponsive) <br>
+
 ![1_create_new_user](https://github.com/ifydevops23/CI_CD/assets/126971054/6b7c0db0-0ea3-4941-a386-d8b36c872f60)
 
 ![1_Jenkins_is ready](https://github.com/ifydevops23/CI_CD/assets/126971054/667075a2-6dd3-4339-abdb-b09b80da0fcb)
 
-The installation is completed!
+The installation is completed!<br>
 
+**Incase proxy server is broken,implement this** - Reload or open in a new tab if neccessary.<br>
+
+![0_jenkins_security](https://github.com/ifydevops23/CI_CD/assets/126971054/7a82b14a-e429-4344-838c-d90f33f45d15)
 
 ## STEP 2 – CONFIGURE JENKINS TO RETRIEVE SOURCE CODES FROM GITHUB USING WEBHOOKS.<br>
 
