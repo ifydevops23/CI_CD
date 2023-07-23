@@ -1,9 +1,15 @@
+## SIMULATING A TYPICAL CI/CD PIPELINE FOR A PHP BASED APPLICATION.
 
-|CI           |DEV      |SIT      |
-|-------------|---------|---------|
-|Nginx        |Nginx    |Nginx    |
-|Jenkins      |Tooling  |Tooling  |
-|MySQL        |PHP-Todo |PHP-Todo |
+
+### ENVIRONMENT SET UP FOR CI/CD PIPELINE
+
+|CI           |DEV      |SIT      |UAT     |PENTEST  |PREPROD |PRODUCTION|
+|-------------|---------|---------|--------|---------|--------|----------|
+|Nginx        |Nginx    |Nginx    |Nginx   |Nginx    |Nginx   |Nginx     |
+|Jenkins      |Tooling  |Tooling  |Tooling |Tooling  |Tooling |Tooling   |
+|MySQL        |PHP-Todo |PHP-Todo |PHP-Todo|PHP-Todo |PHP-Todo|PHP-Todo  |
 |Artifactory  |         |         |
 |Sonaqube     |         |         |
-|-------------|---------|---------|
+
+
+
