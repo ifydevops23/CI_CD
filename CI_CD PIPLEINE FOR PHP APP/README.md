@@ -1,7 +1,9 @@
 
 |CI           |DEV      |SIT      |
 |-------------|---------|---------|
-|Jenkins      |         |         |
-|MySQL        |Todo     |Todo     |
+|Nginx        |Nginx    |Nginx    |
+|Jenkins      |Tooling  |Tooling  |
+|MySQL        |PHP-Todo |PHP-Todo |
 |Artifactory  |         |         |
 |Sonaqube     |         |         |
+|-------------|---------|---------|
