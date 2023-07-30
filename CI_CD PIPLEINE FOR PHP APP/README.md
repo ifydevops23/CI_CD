@@ -43,7 +43,13 @@ ci inventory file
 
 [artifact_repository]
 <Artifact_repository-Private-IP-Address>
+
+[db]
+<DB-Server-Private-IP-Address>
+```
+
 dev Inventory file
+```
 [tooling]
 <Tooling-Web-Server-Private-IP-Address>
 
