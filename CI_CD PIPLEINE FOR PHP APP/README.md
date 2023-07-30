@@ -2,7 +2,11 @@
 
 SIMULATING A TYPICAL CI/CD PIPELINE FOR A PHP BASED APPLICATION<br>
 As part of the ongoing infrastructure development with Ansible started from Project 11, you will be tasked to create a pipeline that simulates continuous integration and delivery. <br>
-Target end to end CI/CD pipeline is represented by the diagram below. It is important to know that both Tooling and TODO Web Applications are based on an interpreted (scripting) language (PHP). It means, it can be deployed directly onto a server and will work without compiling the code to a machine language.<br>
+Target end to end CI/CD pipeline is represented by the diagram below.<br>
+
+![011_diagram_of_implementation](https://github.com/ifydevops23/CI_CD/assets/126971054/df493e82-51e0-4982-9aa8-c6aaeba889cd)
+
+It is important to know that both Tooling and TODO Web Applications are based on an interpreted (scripting) language (PHP). It means, it can be deployed directly onto a server and will work without compiling the code to a machine language.<br>
 The problem with that approach is, it would be difficult to package and version the software for different releases. And so, in this project, we will be using a different approach for releases, rather than downloading directly from git, we will be using Ansible uri module.<br>
 
 ## SET-UP<br>
@@ -103,28 +107,54 @@ For example, If there are variables we need to be common between both pentest-to
 |Artifactory  |         |         |
 |Sonaqube     |         |         |
 
+### ANSIBLE ROLES FOR CI ENVIRONMENT
+Now go ahead and Add two more roles to ansible:<br>
+SonarQube (Scroll down to the Sonarqube section to see instructions on how to set up and configure SonarQube manually)<br>
 
+Artifactory<br>
+
+**Why do we need SonarQube?** <br>
+SonarQube is an open-source platform developed by SonarSource for continuous inspection of code quality, it is used to perform automatic reviews with static analysis of code to detect bugs, code smells, and security vulnerabilities. <br>
+
+**Why do we need Artifactory?** <br>
+
+Artifactory is a product by JFrog that serves as a binary repository manager. The binary repository is a natural extension to the source code repository, in that the outcome of your build process is stored. It can be used for certain other automation, but we will it strictly to manage our build artifacts.<br>
+
+### Configuring Ansible For Jenkins Deployment <br>
+
+In previous projects, you have been launching Ansible commands manually from a CLI. Now, with Jenkins, we will start running Ansible from Jenkins UI.
+To do this,<br>
+
+Navigate to Jenkins URL http://<Public-IP-of_Jenkins_Server>:8080 <br> 
+
+Install & Open Blue Ocean Jenkins Plugin <br>
+
+![01_install_blue_ocean](https://github.com/ifydevops23/CI_CD/assets/126971054/a4e05403-26bd-4777-8da7-6383c41da344)
+
+Create a new pipeline<br>
+
+![0_Create_first_pipeline](https://github.com/ifydevops23/CI_CD/assets/126971054/6c62d737-e485-4a3a-9e5c-f80cced596a4)
 
 Select GitHub<br>
 
+![01_Create_token](https://github.com/ifydevops23/CI_CD/assets/126971054/0d017e40-e728-4fe0-969e-324d542f8889)
 
-Connect Jenkins with GitHub<br>
+**Connect Jenkins with GitHub** <br>
 
-Login to GitHub & Generate an Access Tokenhttps://www.darey.io/wp-content/uploads/2021/07/Jenkins-Create-Access-Token-To-Github.png<br>
+Login to GitHub & Generate an Access Token (Leave every config as Default.) <br>
 
-
+![0_generate_token_for_toooling_app](https://github.com/ifydevops23/CI_CD/assets/126971054/4ad2026c-416c-4460-aea4-adc6398b6d36)
 
 Copy Access Token<br>
 
-
 Paste the token and connect<br>
-
-
 Create a new Pipeline<br>
 
+![01_after_generating_token_create_pipeline](https://github.com/ifydevops23/CI_CD/assets/126971054/16d09130-ee7b-4d29-8a55-9074e8d2fbd0)
 
 At this point you may not have a Jenkinsfile in the Ansible repository, so Blue Ocean will attempt to give you some guidance to create one. But we do not need that. We will rather create one ourselves. So, click on Administration to exit the Blue Ocean console.<br>
 
+![0_click_administartion_to_go_back](https://github.com/ifydevops23/CI_CD/assets/126971054/8715f0bf-ee73-44f7-8843-89789a76a843)
 
 Here is our newly created pipeline. It takes the name of your GitHub repository.<br>
 
@@ -132,7 +162,6 @@ Here is our newly created pipeline. It takes the name of your GitHub repository.
 Let us create our Jenkinsfile<br>
 
 Inside the Ansible project, create a new directory deploy and start a new file Jenkinsfile inside the directory.<br>
-
 
 Add the code snippet below to start building the Jenkinsfile gradually. This pipeline currently has just one stage called Build and the only thing we are doing is using the shell script module to echo Building Stage<br>
 ```
@@ -152,15 +181,15 @@ pipeline {
 }
 ```
 Now go back into the Ansible pipeline in Jenkins, and select configure<br>
-
-
 Scroll down to Build Configuration section and specify the location of the Jenkinsfile at deploy/Jenkinsfile<br>
 
+![0_build_configurations](https://github.com/ifydevops23/CI_CD/assets/126971054/9ce88a74-28b8-4749-8298-cdca92ab822a)
 
 Back to the pipeline again, this time click "Build now"<br>
 
-
 This will trigger a build and you will be able to see the effect of our basic Jenkinsfile configuration by going through the console output of the build.
+
+
 To really appreciate and feel the difference of Cloud Blue UI, it is recommended to try triggering the build again from Blue Ocean interface.
 Click on Blue Ocean<br>
 
