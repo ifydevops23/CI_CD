@@ -104,7 +104,7 @@ For example, If there are variables we need to be common between both pentest-to
 |Nginx        |Nginx    |Nginx    |Nginx   |Nginx    |Nginx   |Nginx     |
 |Jenkins      |Tooling  |Tooling  |Tooling |Tooling  |Tooling |Tooling   |
 |MySQL        |PHP-Todo |PHP-Todo |PHP-Todo|PHP-Todo |PHP-Todo|PHP-Todo  |
-|Artifactory  |DB       |         |
+|Artifactory  |DB       | DB      |DB      |DB       |DB      |DB        |
 |Sonaqube     |         |         |
 
 ### ANSIBLE ROLES FOR CI ENVIRONMENT
@@ -194,8 +194,8 @@ This will trigger a build and you will be able to see the effect of our basic Je
 
 
 To really appreciate and feel the difference of Cloud Blue UI, it is recommended to try triggering the build again from Blue Ocean interface.
-Click on Blue Ocean<br>
 
+Click on Blue Ocean<br>
 
 Select your project<br>
 
@@ -235,14 +235,18 @@ Currently we only have the Build stage. Let us add another stage called Test. Pa
 ```
 To make your new branch show up in Jenkins, we need to tell Jenkins to scan the repository.<br>
 
+![0_scan_repository_after_creating_branch_new-features](https://github.com/ifydevops23/CI_CD/assets/126971054/2a6e41b4-97c7-4e50-b690-5bf7defc7af3)
+
+
+![0_multiple_builds_from_different_branches](https://github.com/ifydevops23/CI_CD/assets/126971054/f28b2000-a50e-4af1-8ebb-0fadbce0745d)
+
+
 Click on the "Administration" button<br>
 
 
 Navigate to the Ansible project and click on "Scan repository now"<br>
 
-
 Refresh the page and both branches will start building automatically. You can go into Blue Ocean and see both branches there too.<br>
-
 
 In Blue Ocean, you can now see how the Jenkinsfile has caused a new step in the pipeline launch build for the new branch.<br>
 
@@ -267,17 +271,36 @@ A QUICK TASK FOR YOU!<br>
 
 6. Eventually, your main branch should have a successful pipeline like this in blue ocean<br>
 
+![0_after_merge_new-features_plus_main](https://github.com/ifydevops23/CI_CD/assets/126971054/780773d3-d904-40ff-99a9-9ad35b71170f)
 
 
-RUNNING ANSIBLE PLAYBOOK FROM JENKINS<br>
+### RUNNING ANSIBLE PLAYBOOK FROM JENKINS<br>
 
 Now that you have a broad overview of a typical Jenkins pipeline. Let us get the actual Ansible deployment to work by:<br>
 
 Installing Ansible on Jenkins<br>
 
+```
+sudo apt update
+sudo apt install ansible -y
+sudo apt install python3-pip
+#Incase there's an available upgrade
+pip install --upgrade ansible
+
+```
+
 Installing Ansible plugin in Jenkins UI
+
+![01_Ansible_plugin](https://github.com/ifydevops23/CI_CD/assets/126971054/0fdd9234-b4ba-4f17-9ef5-b888b981bd8c)
+
+
+
+
+
+
 Creating Jenkinsfile from scratch. (Delete all you currently have in there and start all over to get Ansible to run successfully)
-You can watch a 10 minutes video here to guide you through the entire setup<br>
+
+
 Note: Ensure that Ansible runs against the Dev environment successfully.<br>
 Possible errors to watch out for:
 Ensure that the git module in Jenkinsfile is checking out SCM to main branch instead of master (GitHub has discontinued the use of Master due to Black Lives Matter. You can read more here)<br>
