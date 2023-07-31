@@ -104,7 +104,7 @@ For example, If there are variables we need to be common between both pentest-to
 |Nginx        |Nginx    |Nginx    |Nginx   |Nginx    |Nginx   |Nginx     |
 |Jenkins      |Tooling  |Tooling  |Tooling |Tooling  |Tooling |Tooling   |
 |MySQL        |PHP-Todo |PHP-Todo |PHP-Todo|PHP-Todo |PHP-Todo|PHP-Todo  |
-|Artifactory  |         |         |
+|Artifactory  |DB       |         |
 |Sonaqube     |         |         |
 
 ### ANSIBLE ROLES FOR CI ENVIRONMENT
@@ -158,10 +158,13 @@ At this point you may not have a Jenkinsfile in the Ansible repository, so Blue 
 
 Here is our newly created pipeline. It takes the name of your GitHub repository.<br>
 
+![0_new-project-after-exit-using-administration](https://github.com/ifydevops23/CI_CD/assets/126971054/c3531dd2-6dbc-448b-a026-a6092082afc6)
+
 
 Let us create our Jenkinsfile<br>
 
-Inside the Ansible project, create a new directory deploy and start a new file Jenkinsfile inside the directory.<br>
+Inside the Ansible project, create a new directory **deploy** and start a new file Jenkinsfile inside the directory.<br>
+
 
 Add the code snippet below to start building the Jenkinsfile gradually. This pipeline currently has just one stage called Build and the only thing we are doing is using the shell script module to echo Building Stage<br>
 ```
