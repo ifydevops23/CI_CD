@@ -294,22 +294,21 @@ Installing Ansible plugin in Jenkins UI
 ![01_Ansible_plugin](https://github.com/ifydevops23/CI_CD/assets/126971054/0fdd9234-b4ba-4f17-9ef5-b888b981bd8c)
 
 
-
-
-
-
-Creating Jenkinsfile from scratch. (Delete all you currently have in there and start all over to get Ansible to run successfully)
+Creating Jenkinsfile from scratch. (Delete all you currently have in there and start all over to get Ansible to run successfully).<br>
 
 
 Note: Ensure that Ansible runs against the Dev environment successfully.<br>
-Possible errors to watch out for:
+Possible errors to watch out for:<br>
 Ensure that the git module in Jenkinsfile is checking out SCM to main branch instead of master (GitHub has discontinued the use of Master due to Black Lives Matter. You can read more here)<br>
-Jenkins needs to export the ANSIBLE_CONFIG environment variable. You can put the .ansible.cfg file alongside Jenkinsfile in the deploy directory. This way, anyone can easily identify that everything in there relates to deployment. Then, using the Pipeline Syntax tool in Ansible, generate the syntax to create environment variables to set.<br>
+Jenkins needs to export the ANSIBLE_CONFIG environment variable. You can put the .ansible.cfg file alongside Jenkinsfile in the deploy directory. This way, anyone can easily identify that everything in there relates to deployment. <br>
+Then, using the Pipeline Syntax tool in Ansible, generate the syntax to create environment variables to set.<br>
 https://wiki.jenkins.io/display/JENKINS/Building+a+software+project<br>
 
 Possible issues to watch out for when you implement this<br>
-Remember that ansible.cfg must be exported to environment variable so that Ansible knows where to find Roles. But because you will possibly run Jenkins from different git branches, the location of Ansible roles will change. Therefore, you must handle this dynamically. You can use Linux Stream Editor sed to update the section roles_path each time there is an execution. You may not have this issue if you run only from the main branch.<br>
-If you push new changes to Git so that Jenkins failure can be fixed. You might observe that your change may sometimes have no effect. Even though your change is the actual fix required. This can be because Jenkins did not download the latest code from GitHub. Ensure that you start the Jenkinsfile with a clean up step to always delete the previous workspace before running a new one. Sometimes you might need to login to the Jenkins Linux server to verify the files in the workspace to confirm that what you are actually expecting is there. Otherwise, you can spend hours trying to figure out why Jenkins is still failing, when you have pushed up possible changes to fix the error.<br>
+Remember that ansible.cfg must be exported to environment variable so that Ansible knows where to find Roles. But because you will possibly run Jenkins from different git branches, the location of Ansible roles will change.<br>
+Therefore, you must handle this dynamically. You can use Linux Stream Editor sed to update the section roles_path each time there is an execution. You may not have this issue if you run only from the main branch.<br>
+If you push new changes to Git so that Jenkins failure can be fixed. You might observe that your change may sometimes have no effect. Even though your change is the actual fix required. This can be because Jenkins did not download the latest code from GitHub.<br>
+Ensure that you start the Jenkinsfile with a clean up step to always delete the previous workspace before running a new one. Sometimes you might need to login to the Jenkins Linux server to verify the files in the workspace to confirm that what you are actually expecting is there. Otherwise, you can spend hours trying to figure out why Jenkins is still failing, when you have pushed up possible changes to fix the error.<br>
 Another possible reason for Jenkins failure sometimes, is because you have indicated in the Jenkinsfile to check out the main git branch, and you are running a pipeline from another branch. So, always verify by logging onto the Jenkins box to check the workspace, and run git branch command to confirm that the branch you are expecting is there.<br>
 If everything goes well for you, it means, the Dev environment has an up-to-date configuration. But what if we need to deploy to other environments?
 Are we going to manually update the Jenkinsfile to point inventory to those environments? such as sit, uat, pentest, etc.<br>
@@ -334,9 +333,8 @@ In previous projects, you have been launching Ansible commands manually from a C
 To do this,<br>
 Navigate to Jenkins URL<br>
 Install & Open Blue Ocean Jenkins Plugin<br>
+
 Create a new pipeline<br>
-
-
 
 Parameterizing Jenkinsfile For Ansible Deployment<br>
 To deploy to other environments, we will need to use parameters.<br>
@@ -375,7 +373,7 @@ pipeline {
     }
 ...
 ```
-In the Ansible execution section, remove the hardcoded inventory/dev and replace with `$inventory/{inventory}<br>
+In the Ansible execution section, remove the hardcoded inventory/dev and replace with `$inventory/${inventory}`<br>
 From now on, each time you hit on execute, it will expect an input.<br>
 
 Notice that the default value loads up, but we can now specify which environment we want to deploy the configuration to. Simply type sit and hit Run<br>
@@ -397,13 +395,34 @@ sudo apt install -y zip libapache2-mod-php phploc php-{xml,bcmath,bz2,intl,gd,mb
 Install Jenkins plugins<br>
 Plot plugin<br>
 Artifactory plugin<br>
+
+![02_artifactory_and_plot_plugin_installed](https://github.com/ifydevops23/CI_CD/assets/126971054/946a0cdc-c35a-4d93-980e-e5224208a783)
+
+
 We will use plot plugin to display tests reports, and code coverage information.<br>
 The Artifactory plugin will be used to easily upload code artifacts into an Artifactory server.<br>
 In Jenkins UI configure Artifactory<br>
 
 Configure the server ID, URL and Credentials, run Test Connection.<br>
 
+![02_jfrog_jenkins_integration](https://github.com/ifydevops23/CI_CD/assets/126971054/5603616a-3915-4645-81f8-7473fa16a324)
+
+
 Phase 2 – Integrate Artifactory repository with Jenkins<br>
+- Create Generic repository
+  
+![013_steps_to_add_repository](https://github.com/ifydevops23/CI_CD/assets/126971054/0fba6c2c-e589-4329-af79-973de21da10e)
+
+
+![013_choose_generic](https://github.com/ifydevops23/CI_CD/assets/126971054/55327a4a-3a2f-44a8-95fc-55150aed43c1)
+
+
+![013_choose_a_name_and_create](https://github.com/ifydevops23/CI_CD/assets/126971054/b48bba16-296d-444d-a520-26a886499502)
+
+
+
+- Edit Jenkins file to point to Artifactory Repository
+
 
 Create a dummy Jenkinsfile in the repository<br>
 Using Blue Ocean, create a multibranch Jenkins pipeline<br>
@@ -453,6 +472,19 @@ pipeline {
 }
 ```
 Notice the Prepare Dependencies section<br>
+- Install manually <br>
+```
+#Composer Install
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/bin/composer
+composer --version
+
+#PHP-Unit Install
+wget -O phpunit https://phar.phpunit.de/phpunit-7.phar
+sudo chmod +x phpunit
+sudo apt install php-xdebug
+```
+
 The required file by PHP is .env so we are renaming .env.sample to .env<br>
 Composer is used by PHP to install all the dependent libraries used by the application<br>
 php artisan uses the .env file to setup the required database objects – (After successful run of this step, login to the database, run show tables and you will see the tables being created for you)<br>
@@ -661,25 +693,23 @@ Move extracted setup to /opt/sonarqube directory<br>
 
 
 
-
-
-
-
-
-
-
 CONFIGURE SONARQUBE
 We cannot run SonarQube as a root user, if you run using root user it will stop automatically. The ideal approach will be to create a separate group and a user to run SonarQube
-Create a group sonar
-sudo groupadd sonar
-Now add a user with control over the /opt/sonarqube directory
- sudo useradd -c "user to run SonarQube" -d /opt/sonarqube -g sonar sonar 
- sudo chown sonar:sonar /opt/sonarqube -R
-Open SonarQube configuration file using your favourite text editor (e.g., nano or vim)
-sudo vim /opt/sonarqube/conf/sonar.properties
+Create a group sonar<br>
+sudo groupadd sonar<br>
+Now add a user with control over the /opt/sonarqube directory<br>
+```
+sudo useradd -c "user to run SonarQube" -d /opt/sonarqube -g sonar sonar 
+sudo chown sonar:sonar /opt/sonarqube -R
+```
+Open SonarQube configuration file using your favourite text editor (e.g., nano or vim)<br>
+`sudo vim /opt/sonarqube/conf/sonar.properties`<br>
 Find the following lines:
+```
 #sonar.jdbc.username=
 #sonar.jdbc.password=
+```
+
 Uncomment them and provide the values of PostgreSQL Database username and password:
 #--------------------------------------------------------------------------------------------------
 
@@ -710,12 +740,13 @@ Uncomment them and provide the values of PostgreSQL Database username and passwo
 
 # The schema must be created first.
 
-
+```
 sonar.jdbc.username=sonar
 sonar.jdbc.password=sonar
 sonar.jdbc.url=jdbc:postgresql://localhost:5432/sonarqube
+```
 Edit the sonar script file and set RUN_AS_USER
-sudo nano /opt/sonarqube/bin/linux-x86-64/sonar.sh
+`sudo nano /opt/sonarqube/bin/linux-x86-64/sonar.sh`<br>
 # If specified, the Wrapper will be run as the specified user.
 
 
@@ -741,26 +772,26 @@ sudo nano /opt/sonarqube/bin/linux-x86-64/sonar.sh
 
 
 RUN_AS_USER=sonar
-Now, to start SonarQube we need to do following:
-Switch to sonar user
-sudo su sonar
-Move to the script directory
-cd /opt/sonarqube/bin/linux-x86-64/
+Now, to start SonarQube we need to do following:<br>
+Switch to sonar user<br>
+`sudo su sonar`<br>
+Move to the script directory<br>
+`cd /opt/sonarqube/bin/linux-x86-64/`<br>
 Run the script to start SonarQube
-./sonar.sh start
+`./sonar.sh start`<br>
 Expected output shall be as:
 Starting SonarQube...
 
 
 Started SonarQube
 Check SonarQube running status:
-./sonar.sh status
-Sample Output below:
-./sonar.sh status
+`./sonar.sh status`<br>
+Sample Output below:<br>
+`./sonar.sh status`<br>
 
 
-SonarQube is running (176483).
-To check SonarQube logs, navigate to /opt/sonarqube/logs/sonar.log directory
+SonarQube is running (176483).<br>
+To check SonarQube logs, navigate to /opt/sonarqube/logs/sonar.log directory<br>
 tail /opt/sonarqube/logs/sonar.log
 Output
 INFO  app[][o.s.a.ProcessLauncherImpl] Launch process[[key='ce', ipcIndex=3, logFilenamePrefix=ce]] from [/opt/sonarqube]: /usr/lib/jvm/java-11-openjdk-amd64/bin/java -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/opt/sonarqube/temp --add-opens=java.base/java.util=ALL-UNNAMED -Xmx512m -Xms128m -XX:+HeapDumpOnOutOfMemoryError -Dhttp.nonProxyHosts=localhost|127.*|[::1] -cp ./lib/common/*:/opt/sonarqube/lib/jdbc/h2/h2-1.3.176.jar org.sonar.ce.app.CeServer /opt/sonarqube/temp/sq-process15059956114837198848properties
